@@ -47,6 +47,7 @@ def test1():
 def total_dist(city_perm, city_locs):
 	assert is_good_perm(city_perm), f'city_perm={city_perm}'
 	n = len(city_perm)
+	
 	total = city_dist(city_perm[0], city_perm[n-1], city_locs)
 	for i in range(1, n):
 		total += city_dist(city_perm[i-1], city_perm[i], city_locs)
@@ -110,7 +111,10 @@ def do_rand_swap(lst):
 def mutate_search(fname, max_iter, pop_size):
 	city_locs = load_city_locs(fname)
 	n = len(city_locs)
+	
+	# generate permutations for a specific population size
 	curr_gen = [rand_perm(n) for i in range(pop_size)]
+	# per population calculate total distance
 	curr_gen = [(total_dist(p, city_locs), p) for p in curr_gen]
 	curr_gen.sort()
 	assert len(curr_gen) == pop_size
@@ -184,22 +188,29 @@ def pmx(s, t):
 	
 	# choose crossover point at random
 	c = random.randrange(1, n-1) # c is index of last element of left part
+	print("Crossover index: ", c)
 
 	# first offspring
 	first = s[:]
 	i = 0
+	print("First offspring")
+	print(first)
 	while i <= c:
 		j = first.index(t[i])
 		first[i], first[j] = first[j], first[i]
 		i += 1	
+		print(first)
 
 	# second offspring
 	second = t[:]
 	i = 0
+	print("Second offspring")
+	print(second)
 	while i <= c:
 		j = second.index(s[i])
 		second[i], second[j] = second[j], second[i]
 		i += 1
+		print(second)
 
 	assert is_good_perm(first)
 	assert is_good_perm(second)

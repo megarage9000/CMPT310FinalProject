@@ -2,10 +2,8 @@
 import tsp
 
 def helloWorld():
-    print("hello World")
-    print("Help me!")
-    result = tsp.load_city_locs("cities1000.txt")
-    for city in result:
-        print(city)
+    perm1 = [1, 3, 4, 2, 5]
+    perm2 = [5, 1, 2, 3, 4]
+    tsp.pmx(perm1, perm2)
     
 helloWorld()
