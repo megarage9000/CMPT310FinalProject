@@ -188,29 +188,22 @@ def pmx(s, t):
 	
 	# choose crossover point at random
 	c = random.randrange(1, n-1) # c is index of last element of left part
-	print("Crossover index: ", c)
 
 	# first offspring
 	first = s[:]
 	i = 0
-	print("First offspring")
-	print(first)
 	while i <= c:
 		j = first.index(t[i])
 		first[i], first[j] = first[j], first[i]
 		i += 1	
-		print(first)
 
 	# second offspring
 	second = t[:]
 	i = 0
-	print("Second offspring")
-	print(second)
 	while i <= c:
 		j = second.index(s[i])
 		second[i], second[j] = second[j], second[i]
 		i += 1
-		print(second)
 
 	assert is_good_perm(first)
 	assert is_good_perm(second)

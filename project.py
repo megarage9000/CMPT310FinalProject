@@ -2,8 +2,11 @@
 import tsp
 
 def helloWorld():
-    perm1 = [1, 3, 4, 2, 5]
-    perm2 = [5, 1, 2, 3, 4]
-    tsp.pmx(perm1, perm2)
-    
+    print("random permutations: ")
+    tsp.rand_best("cities10.txt", 100)
+    print("mutate search: ")
+    tsp.mutate_search("cities10.txt", 100, 4)
+    print("crossover search: ")
+    tsp.crossover_search("cities10.txt", 100, 4)
+
 helloWorld()
