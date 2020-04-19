@@ -13,17 +13,16 @@ class BoruvkaTree():
         self.tree = []
         self.generateEdges()
         
+    # Generate edges with their weight being
+    # distance
     def generateEdges(self):
-        for i in range(1, len(self.cities) + 1):
-            for j in range(i + 1, len(self.cities) + 1):
-                edgeWeight = tsp.city_dist(i, j, self.cities)
-                edge = Edge(i, j, edgeWeight)
+        for city1 in range(1, len(self.cities) + 1):
+            for city2 in range(city1 + 1, len(self.cities) + 1):
+                edgeWeight = tsp.city_dist(city1, city2, self.cities)
+                edge = Edge(city1, city2, edgeWeight)
                 self.edges.append(edge)
 
     
-        
-        
-        
 class Edge():
     
     def __init__(self, city1, city2, weight):
