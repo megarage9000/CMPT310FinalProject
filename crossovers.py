@@ -194,6 +194,7 @@ def makeOffSpringOrder(middleParentA, sequenceBAfterCutPoint, firstCutPoint, sec
 def getConflictsOrder(middlePartition, otherPartition):
     return list(set(middlePartition) & set(otherPartition))
 
+# ---- orderCrossover End ---- 
 def test():
     partiallyMappedTest("cities1000.txt", 100, 20)
     orderCrossoverTest("cities1000.txt", 100, 20)
