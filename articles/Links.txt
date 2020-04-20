@@ -10,3 +10,25 @@ Course Reserve Note: You may NOT post or upload an electronic copy.Create a link
 Interlibrary loan electronic: Permitted
 Interlibrary loan note: No Inter library Loan for Standards.
 
+Crossovers operators for TSP:
+TY - JOUR
+TI - Genetic Algorithm for Traveling Salesman Problem with Modified Cycle Crossover Operator
+VL - 2017
+PY - 2017
+DA - 2017/10/25
+DO - 10.1155/2017/7430125
+UR - https://doi.org/10.1155/2017/7430125
+AB - Genetic algorithms are evolutionary techniques used for optimization purposes according to survival of the fittest idea. These methods do not ensure optimal solutions; however, they give good approximation usually in time. The genetic algorithms are useful for NP-hard problems, especially the traveling salesman problem. The genetic algorithm depends on selection criteria, crossover, and mutation operators. To tackle the traveling salesman problem using genetic algorithms, there are various representations such as binary, path, adjacency, ordinal, and matrix representations. In this article, we propose a new crossover operator for traveling salesman problem to minimize the total distance. This approach has been linked with path representation, which is the most natural way to represent a legal tour. Computational results are also reported with some traditional path representation methods like partially mapped and order crossovers along with new cycle crossover operator for some benchmark TSPLIB instances and found improvements.
+JF - Computational Intelligence and Neuroscience
+SN - 1687-5265
+PB - Hindawi
+SP - 7430125
+KW - 
+A2 - Conforto, Silvia
+AU - Hussain, Abid
+AU - Muhammad, Yousaf Shad
+AU - Nauman Sajid, M.
+AU - Hussain, Ijaz
+AU - Mohamd Shoukry, Alaa
+AU - Gani, Showkat
+ER - 

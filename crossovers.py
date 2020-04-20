@@ -2,6 +2,10 @@ import tsp
 import random
 
 #TODO implement crossover methods
+#TODO implement boruvka/kruskal tree for initial population
+
+# NOTE:
+# - ALL CROSSOVER METHOD IDEAS CAME FROM THE CROSSOVERS OPERATORS FOR TSP PDF
 
 def partiallyMappedTest(fname, max_iter, pop_size):
     city_locs = tsp.load_city_locs(fname)
@@ -18,7 +22,7 @@ def partiallyMappedTest(fname, max_iter, pop_size):
     for i in range(max_iter):
         # copy the top 50% of the population to the next generation, and for the rest randomly 
         # cross-breed pairs
-        top_half = [p[1] for p in curr_gen[:int(n/2)]]
+        top_half = [p[1] for p in curr_gen[:int(pop_size/2)]]
         next_gen = top_half[:]
         while len(next_gen) < pop_size:
             parentA = random.choice(top_half)
@@ -27,8 +31,8 @@ def partiallyMappedTest(fname, max_iter, pop_size):
                 parentA = random.choice(top_half)
                 parentB = random.choice(top_half)
             first, second = partiallyMappedCrossover(parentA, parentB)
-            assert tsp.is_good_perm(first)
-            assert tsp.is_good_perm(second)
+            tsp.do_rand_swap(first)
+            tsp.do_rand_swap(second)
             next_gen.append(first)
             next_gen.append(second)
 
@@ -117,7 +121,6 @@ def resolveConflictPartial(conflict, partitionA, partionB):
 # ---- partiallyMappedCrossover End ----     
 
 # ---- orderCrossover ----
-# - Borrows a few functions from partiallyMappedCrossover
 
 def orderCrossoverTest(fname, max_iter, pop_size):
     city_locs = tsp.load_city_locs(fname)
@@ -133,7 +136,7 @@ def orderCrossoverTest(fname, max_iter, pop_size):
     for i in range(max_iter):
         # copy the top 50% of the population to the next generation, and for the rest randomly 
         # cross-breed pairs
-        top_half = [p[1] for p in curr_gen[:int(n/2)]]
+        top_half = [p[1] for p in curr_gen[:int(pop_size/2)]]
         next_gen = top_half[:]
         while len(next_gen) < pop_size:
             parentA = random.choice(top_half)
@@ -142,8 +145,9 @@ def orderCrossoverTest(fname, max_iter, pop_size):
                 parentA = random.choice(top_half)
                 parentB = random.choice(top_half)
             first, second = orderCrossover(parentA, parentB)
-            assert tsp.is_good_perm(first)
-            assert tsp.is_good_perm(second)
+            tsp.do_rand_swap(first)
+            tsp.do_rand_swap(second)
+            
             next_gen.append(first)
             next_gen.append(second)
 
@@ -161,8 +165,6 @@ def orderCrossoverTest(fname, max_iter, pop_size):
     # print(curr_gen[0][1])
     assert tsp.is_good_perm(curr_gen[0][1])
 
-
-
 def orderCrossover(parentA, parentB):
     assert tsp.is_good_perm(parentA)
     assert tsp.is_good_perm(parentB)
@@ -177,11 +179,11 @@ def orderCrossover(parentA, parentB):
     # - parent 2
     leftParentB, middleParentB, rightParentB = splitParent(parentB, firstCutPoint, secondCutPoint)
     
-    offspringA = makeOffSpringOrder(middleParentA, rightParentB + leftParentB + middleParentB, firstCutPoint, secondCutPoint)
-    offspringB = makeOffSpringOrder(middleParentB, rightParentA + leftParentA + middleParentA, firstCutPoint, secondCutPoint)
+    offspringA = makeOffSpringOrder(middleParentA, rightParentB + leftParentB + middleParentB, firstCutPoint)
+    offspringB = makeOffSpringOrder(middleParentB, rightParentA + leftParentA + middleParentA, firstCutPoint)
     return offspringA, offspringB
     
-def makeOffSpringOrder(middleParentA, sequenceBAfterCutPoint, firstCutPoint, secondCutPoint):
+def makeOffSpringOrder(middleParentA, sequenceBAfterCutPoint, firstCutPoint):
     conflicts = getConflictsOrder(middleParentA, sequenceBAfterCutPoint)
     for conflict in conflicts:
         sequenceBAfterCutPoint.remove(conflict)
@@ -195,10 +197,13 @@ def getConflictsOrder(middlePartition, otherPartition):
     return list(set(middlePartition) & set(otherPartition))
 
 # ---- orderCrossover End ---- 
+
 def test():
-    partiallyMappedTest("cities1000.txt", 100, 20)
-    orderCrossoverTest("cities1000.txt", 100, 20)
-    tsp.crossover_search("cities1000.txt", 100, 20)
+    partiallyMappedTest("cities1000.txt", 100, 50)
+    orderCrossoverTest("cities1000.txt", 100, 50)
+    tsp.crossover_search("cities1000.txt", 100, 50)
+    tsp.mutate_search("cities1000.txt", 100, 50)
+    tsp.rand_best("cities1000.txt", 100)
     
         
 test()

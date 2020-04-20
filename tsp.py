@@ -74,7 +74,7 @@ def rand_best(fname, max_iter):
 
 	best = rand_perm(n)
 	best_score = total_dist(best, city_locs)	
-	print(f'New best perm ({n}): {best}')
+	# print(f'New best perm ({n}): {best}')
 	print(f'              Score: {best_score}\n')
 	assert is_good_perm(best)
 
@@ -93,7 +93,7 @@ def rand_best(fname, max_iter):
 		curr_score = total_dist(curr, city_locs)
 
 	print(f'After {max_iter} random tries, this is the best tour:')
-	print(best)
+	# print(best)
 	print(f'score = {best_score}')
 
 def do_rand_swap(lst):
@@ -141,7 +141,7 @@ def mutate_search(fname, max_iter, pop_size):
 	print()
 	print(f'After {max_iter} generations of {pop_size} permutations, the best is:')
 	print(f'score = {curr_gen[0][0]}')
-	print(curr_gen[0][1])
+	# print(curr_gen[0][1])
 	assert is_good_perm(curr_gen[0][1])
 
 #
@@ -232,7 +232,7 @@ def crossover_search(fname, max_iter, pop_size):
 	for i in range(max_iter):
 		# copy the top 50% of the population to the next generation, and for the rest randomly 
 		# cross-breed pairs
-		top_half = [p[1] for p in curr_gen[:int(n/2)]]
+		top_half = [p[1] for p in curr_gen[:int(pop_size/2)]]
 		next_gen = top_half[:]
 		while len(next_gen) < pop_size:
 			s = random.choice(top_half)
