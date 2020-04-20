@@ -97,21 +97,39 @@ class Graph():
     # Using BFS to search for cycle
     # https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/
     def isCycleOnEdge(self, startingVertexID):
+        visited = [False] * self.numVertices
+        startingVertex = self.getVertex(startingVertexID)
         
-        visited = [False] * len(self.getAllVertices())    
-        queue = [startingVertexID]
-        visited[startingVertexID] = True
+        for childID in startingVertex.getAllAdjacent():
+            child = self.getVertex(childID)
+            for grandChildID in child.getAllAdjacent():
+                if(grandChildID != startingVertexID):
+                    if(self.isCycle(grandChildID, startingVertexID, visited)):
+                        return True
+        return False
+            
+    
+    def isCycle(self, parentID, startingVertexID, visited):
+        queue = [parentID]
+        visited[parentID - 1] = True
         
-        while len(queue) > 0:       
-            vertexID = queue.pop()
-            vertex = self.getVertex(vertexID)
+        while(len(queue) > 0):
+            vertexID = queue.pop(0)
+            if(vertexID == startingVertexID):
+                return True
+            else:
+                for childID in self.getVertex(vertexID).getAllAdjacent():
+                    if(visited[childID - 1] == False):
+                        queue.append(childID)
+                        visited[childID - 1] == True
+                        if(childID == startingVertexID):
+                            return True
+                        
+        return False
+                
             
-            for childID in vertex.getAllAdjacent():
-                if visited[childID] == False:
-                    queue.append(childID)
-                    visited[childID] == True
-            
-                             
+                
+           
         
             
     def getAllVertices(self):
@@ -126,7 +144,7 @@ class Graph():
     
 def test():    
     # bulding a kruskal tree
-    cities = tsp.load_city_locs("cities10.txt")
+    cities = tsp.load_city_locs("cities1000.txt")
     graph = Graph()
     edges = []
     for cityA in range(1, len(cities) + 1):
