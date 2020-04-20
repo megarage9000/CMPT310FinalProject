@@ -252,7 +252,7 @@ def crossover_search(fname, max_iter, pop_size):
 	print()
 	print(f'After {max_iter} generations of {pop_size} permutations, the best is:')
 	print(f'score = {curr_gen[0][0]}')
-	print(curr_gen[0][1])
+	# print(curr_gen[0][1])
 	assert is_good_perm(curr_gen[0][1])
 
 if __name__ == '__main__':
