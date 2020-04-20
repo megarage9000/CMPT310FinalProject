@@ -1,11 +1,13 @@
 import tsp
+import sys
 
-#TODO implement Boruvka's algorithm?
-# - Make an algorithm/class to construct a minimum spanning tree given the cities
-# - Source: https://www.geeksforgeeks.org/boruvkas-algorithm-greedy-algo-9/
+#TODO make vertex store IDs of vertices instead
 
 
-    
+
+ # Vertex Class
+ # - Has a unique ID
+ # - Has a list of vertex ID's it is adjacent to
 class Vertex():
     
     def __init__(self, key):
@@ -17,7 +19,7 @@ class Vertex():
         
     def removeAdjacent(self, neighbor):
         self.adjacent.remove(neighbor)
-        
+
     def getID(self):
         return self.key
     
@@ -26,12 +28,12 @@ class Vertex():
     
     def toString(self):
         return "Vertex: " + str(self.key) + ", adjacent to " + str(self.adjacent)
+
     
 class Edge():
     
     def __init__(self, vertexA_ID, vertexB_ID, weight):
-        self.vertices = [vertexA_ID, vertexB_ID]
-        self.vertices.sort()
+        self.vertices = (vertexA_ID, vertexB_ID)
         self.weight = weight
         
     def getVertices(self):
@@ -59,6 +61,10 @@ class Edge():
     
 class Graph():
     
+   
+            
+        
+    
     def __init__(self):
         self.verticesDictionary = {}
         self.numVertices = 0
@@ -75,46 +81,49 @@ class Graph():
             self.verticesDictionary[key] = vertex
             self.numVertices += 1
         
-    def addEdge(self, vertexA, vertexB):
-        self.getVertex(vertexA.getID()).addAdjacent(vertexB)
-        self.getVertex(vertexB.getID()).addAdjacent(vertexA)   
-        if self.isCycleOnEdgeAdd(vertexB.getID()):
-            self.deleteEdge(vertexA, vertexB)
+    def addEdge(self, Edge):
+        verticesID = Edge.getVertices()
+        vertexA_ID = verticesID[0]
+        vertexB_ID = verticesID[1]
+        self.getVertex(vertexA_ID).addAdjacent(vertexB_ID)
+        self.getVertex(vertexB_ID).addAdjacent(vertexA_ID)
+        if(self.isCycleOnEdge(vertexA_ID)):
+            self.removeEdge(vertexA_ID, vertexB_ID)
+            
+    def removeEdge(self, vertexA_ID, vertexB_ID):
+        self.getVertex(vertexA_ID).removeAdjacent(vertexB_ID)
+        self.getVertex(vertexB_ID).removeAdjacent(vertexA_ID)
+          
+    # Using BFS to search for cycle
+    # https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/
+    def isCycleOnEdge(self, startingVertexID):
         
-    def deleteEdge(self, vertexA, vertexB):
-        self.getVertex(vertexA.getID()).removeAdjacent(vertexB)
-        self.getVertex(vertexB.getID()).removeAdjacent(vertexA)
+        visited = [False] * len(self.getAllVertices())    
+        queue = [startingVertexID]
+        visited[startingVertexID] = True
         
-    def addEdgeFromEdge(self, Edge):
-        vertices = Edge.getVertices()
-        vertexA = self.getVertex(vertices[0])
-        vertexB = self.getVertex(vertices[1])
-        self.addEdge(vertexA, vertexB)
+        while len(queue) > 0:       
+            vertexID = queue.pop()
+            vertex = self.getVertex(vertexID)
+            
+            for childID in vertex.getAllAdjacent():
+                if visited[childID] == False:
+                    queue.append(childID)
+                    visited[childID] == True
+            
+                             
         
-        
+            
     def getAllVertices(self):
         return self.verticesDictionary.values()
+    
+    def printAllVertices(self):
+        for vertex in self.getAllVertices():
+            print(vertex.toString())
 
-
-    # Cycles here are ones consisting with > 3 edges    
-    def isCycle(self, parent, parentOfParent):
-        for child in parent.getAllAdjacent():
-            if(child != parent):
-                if(child == parentOfParent or self.isCycle(child, parent)):
-                    print("true!")
-                    return True
-        return False
-
-    def isCycleOnEdgeAdd(self, vertexID):
-        startingVertex = self.getVertex(vertexID)
-        children = startingVertex.getAllAdjacent()
-        for child in children:
-            if(child != startingVertex):
-                if(self.isCycle(child, startingVertex)):
-                    print("True!")
-                    return True
-        return False
-
+            
+    
+    
 def test():    
     # bulding a kruskal tree
     cities = tsp.load_city_locs("cities10.txt")
@@ -132,12 +141,12 @@ def test():
     
              
     for edge in edges:
-       # graph.addEdgeFromEdge(edge)
-       print(edge.toString())
+       graph.addEdge(edge)
+       # print(edge.toString())
        
     for vertex in graph.getAllVertices():
         print(vertex.toString())
+
     
-    print("hello")      
   
 test()
