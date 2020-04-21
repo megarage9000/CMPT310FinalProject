@@ -1,16 +1,8 @@
 Optimal Tree for genetic algorithms:
-https://arxiv.org/abs/1204.2352
-
-Hybrid Genetic Algorithms for TSP:
-License Terms
-Course Pack Print: Prohibited
-Course Pack Note: Material from this resource may NOT be used to assemble a print coursepack. Create a link to the item instead.
-Course Reserve Electronic Copy: Prohibited
-Course Reserve Note: You may NOT post or upload an electronic copy.Create a link to the item instead.
-Interlibrary loan electronic: Permitted
-Interlibrary loan note: No Inter library Loan for Standards.
+Link: https://arxiv.org/abs/1204.2352
 
 Crossovers operators for TSP:
+Link: https://www.hindawi.com/journals/cin/2017/7430125/
 TY - JOUR
 TI - Genetic Algorithm for Traveling Salesman Problem with Modified Cycle Crossover Operator
 VL - 2017
@@ -32,3 +24,14 @@ AU - Hussain, Ijaz
 AU - Mohamd Shoukry, Alaa
 AU - Gani, Showkat
 ER - 
+
+Edge Assembly Cross over:
+Link: https://web-a-ebscohost-com.proxy.lib.sfu.ca/ehost/detail/detail?vid=0&sid=7fbd58a3-1fa7-4534-89c3-4529706c3560%40sessionmgr4006&bdata=JnNpdGU9ZWhvc3QtbGl2ZQ%3d%3d#AN=87120578&db=aph
+License:
+License Terms
+Course Pack Print: Prohibited
+Course Pack Note: Permission to include content in coursepacks is NOT included under the terms of this license. PERSISTENT LINKS to individual articles for access by Authorized Users for Permitted Uses are allowed, from within secure authentication environments
+Course Reserve Electronic Copy: Permitted
+Course Reserve Note: Members and Authorized Users may incorporate parts of the Licensed Material in resource lists and in any other material (including but not limited to multi-media works) to be used in the course of instruction and/or in virtual and managed environments (including but not limited to virtual learning environments,managed learning environments, virtual research environments and library environments) hosted on a Secure Network (only accessible to Authorized Users by Secure Authentication). Each item shall carry appropriate acknowledgement of the source, listing title and copyright owner.
+Interlibrary loan electronic: Permitted
+Interlibrary loan note: The license reaffirms basic usage rights, including walk-in users, ILL, and scholarly sharing. Note that in a minority of cases publishers are not willing to grant a particular right, in which case the publisher will prominently post a note on the content indicating the restriction.

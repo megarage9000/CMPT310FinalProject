@@ -1,4 +1,5 @@
 import tsp
+import random
 import crossovers
 
 
@@ -51,6 +52,8 @@ def bestEdgesSearch(parentA, parentB, cities):
     offSpringA = makePermBestEdges(bestVerticesA, B)
     offSpringB = makePermBestEdges(bestVerticesB, A)
     
+    assert tsp.is_good_perm(offSpringA)
+    assert tsp.is_good_perm(offSpringB)
     
     return offSpringA, offSpringB 
     
@@ -94,24 +97,118 @@ def makePermBestEdges(bestVertices, otherPermuation):
     return newPerm
     
 
+def bestEdges(fname, max_iter, pop_size):
+    city_locs = tsp.load_city_locs(fname)
+    n = len(city_locs)
+    # generate permutations for a specific population size
+    curr_gen = [tsp.rand_perm(n) for i in range(pop_size)]
+    # per population calculate total distance
+    curr_gen = [(tsp.total_dist(p, city_locs), p) for p in curr_gen]
+    curr_gen.sort()
+    assert len(curr_gen) == pop_size
+    
+    
+    print(f'bestEdges("{fname}", max_iter={max_iter}, pop_size={pop_size}) ...')
+    for i in range(max_iter):
+        print("iteration: ", i)
+        # copy the top 50% of the population to the next generation, and for the rest randomly 
+        # cross-breed pairs
+        top_half = [p[1] for p in curr_gen[:int(pop_size/2)]]
+        next_gen = top_half[:]
+        while len(next_gen) < pop_size:
+            parentA = random.choice(top_half)
+            parentB = random.choice(top_half)
+            while parentA == parentB:
+                parentA = random.choice(top_half)
+                parentB = random.choice(top_half)
+            first, second = bestEdgesSearch(parentA, parentB, city_locs)
+            tsp.do_rand_swap(first)
+            tsp.do_rand_swap(second)
+            
+            next_gen.append(first)
+            next_gen.append(second)
 
+        next_gen = next_gen[:pop_size]
+
+        # create the next generation of (score, permutations) pairs
+        assert len(next_gen) == pop_size 
+        curr_gen = [(tsp.total_dist(p, city_locs), p) for p in next_gen]
+        curr_gen.sort()
+
+    print(f'... bestEdges("{fname}", max_iter={max_iter}, pop_size={pop_size})')
+    print()
+    print(f'After {max_iter} generations of {pop_size} permutations, the best is:')
+    print(f'score = {curr_gen[0][0]}')
+    # print(curr_gen[0][1])
+    assert tsp.is_good_perm(curr_gen[0][1])
+    
+def optimizedBestSearch(fname, max_iter=100, pop_size=50, percentToSwitch=5):
+    city_locs = tsp.load_city_locs(fname)
+    n = len(city_locs)
+    curr_gen = [tsp.rand_perm(n) for i in range(pop_size)]
+    curr_gen = [(tsp.total_dist(p, city_locs), p) for p in curr_gen]
+    curr_gen.sort()
+    
+    bestScore = curr_gen[0][0]
+    bestPermuation = curr_gen[0][1]
+    useMutateSearch = False
+    
+    print(f'Optimized bestEdges("{fname}", max_iter={max_iter}, pop_size={pop_size}) ...')
+    for i in range(max_iter):
+        print("iteration: ", i)
+        top_half = [p[1] for p in curr_gen[:int(pop_size/2)]]
+        next_gen = top_half[:]
+        while len(next_gen) < pop_size:
+            parentA = random.choice(top_half)
+            parentB = random.choice(top_half)
+            while parentA == parentB:
+                parentA = random.choice(top_half)
+                parentB = random.choice(top_half)
+            if(useMutateSearch):
+                first = parentA[:]
+                second = parentB[:]  
+                tsp.do_rand_swap(first)
+                tsp.do_rand_swap(second)
+            else:   
+                first, second = bestEdgesSearch(parentA, parentB, city_locs)
+            next_gen.append(first)
+            next_gen.append(second)
+
+        next_gen = next_gen[:pop_size]
+        assert len(next_gen) == pop_size 
+        curr_gen = [(tsp.total_dist(p, city_locs), p) for p in next_gen]
+        curr_gen.sort()
+
+        useMutateSearch = ifSwitchToMutate(bestScore, curr_gen[0][0], percentToSwitch)
+        
+        if(curr_gen[0][0] < bestScore):
+            bestScore = curr_gen[0][0]
+            bestPermuation = curr_gen[0][1]
+        
+    print(f'... Optimized bestEdges("{fname}", max_iter={max_iter}, pop_size={pop_size})')
+    print()
+    print(f'After {max_iter} generations of {pop_size} permutations, the best is:')
+    print(f'score = {bestScore}')
+    print(bestPermuation)
+    assert tsp.is_good_perm(bestPermuation)
+
+def calculateImprovement(oldScore, newScore):
+    percent = float((newScore/oldScore) * 100)
+    return 100 - percent 
+
+def ifSwitchToMutate(oldScore, newScore, percentToSwitch):
+    improvement = calculateImprovement(oldScore, newScore)
+    print("Improvement: ", improvement)
+    if(improvement <= percentToSwitch and improvement != 0):
+        return True
+    else:
+        return False
+    
 def test2():
-    cities = tsp.load_city_locs("cities1000.txt")
-    permutationA = tsp.rand_perm(1000)
-    permutationB = tsp.rand_perm(1000)
-    print("permutationA Distance: ", tsp.total_dist(permutationA, cities))
-    print("permutationB Distance: ", tsp.total_dist(permutationB, cities))
-    offSpringA, offSpringB = bestEdgesSearch(permutationA, permutationB, cities)
-    print("offSpringA bestEdge Distance: ", tsp.total_dist(offSpringA, cities))
-    print("offSpringB bestEdge Distance: ", tsp.total_dist(offSpringB, cities))
+
+    optimizedBestSearch("cities1000.txt", 100, 100, 1)
     
-    offSpringA, offSpringB = crossovers.partiallyMappedCrossover(permutationA, permutationB)
-    print("offSpringA partiallyMapped Distance: ", tsp.total_dist(offSpringA, cities))
-    print("offSpringB partiallyMapped Distance: ", tsp.total_dist(offSpringB, cities))
     
-    offSpringA, offSpringB = crossovers.orderCrossover(permutationA, permutationB)
-    print("offSpringA order Distance: ", tsp.total_dist(offSpringA, cities))
-    print("offSpringB order Distance: ", tsp.total_dist(offSpringB, cities))
     
     
 
