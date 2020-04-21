@@ -43,12 +43,15 @@ def bestEdgesSearch(parentA, parentB, cities):
     A = parentA[:]
     B = parentB[:]
     
+    # Retrieve best vertices from best edges
     bestVerticesA = getBestEdgeVertices(A, cities)
     bestVerticesB = getBestEdgeVertices(B, cities)
     
+    # Marking vertices that aren't in best edges as -1
     bestVerticesA = [-1 if x not in bestVerticesA else x for x in A]
     bestVerticesB = [-1 if x not in bestVerticesB else x for x in B]
     
+    # Making offspring
     offSpringA = makePermBestEdges(bestVerticesA, B)
     offSpringB = makePermBestEdges(bestVerticesB, A)
     
@@ -84,7 +87,7 @@ def getBestEdgeVertices(parent, cities):
     [bestVertices.append(x) for x in vertices if x not in bestVertices]
     return bestVertices
         
-    
+# Make complete permuations from other parent 
 def makePermBestEdges(bestVertices, otherPermuation):
     otherPermNoConflicts = [item for item in otherPermuation if item not in bestVertices]
     newPerm = bestVertices[:]
@@ -96,7 +99,7 @@ def makePermBestEdges(bestVertices, otherPermuation):
             i += 1
     return newPerm
     
-
+# Unoptimized bestEdges GA
 def bestEdges(fname, max_iter, pop_size):
     city_locs = tsp.load_city_locs(fname)
     n = len(city_locs)
@@ -167,10 +170,11 @@ def optimizedBestSearch(fname, max_iter=100, pop_size=50, percentToSwitch=5):
             if(useMutateSearch):
                 first = parentA[:]
                 second = parentB[:]  
-                tsp.do_rand_swap(first)
-                tsp.do_rand_swap(second)
             else:   
                 first, second = bestEdgesSearch(parentA, parentB, city_locs)
+                
+            tsp.do_rand_swap(first)
+            tsp.do_rand_swap(second)
             next_gen.append(first)
             next_gen.append(second)
 
@@ -178,12 +182,13 @@ def optimizedBestSearch(fname, max_iter=100, pop_size=50, percentToSwitch=5):
         assert len(next_gen) == pop_size 
         curr_gen = [(tsp.total_dist(p, city_locs), p) for p in next_gen]
         curr_gen.sort()
-
+        
         useMutateSearch = ifSwitchToMutate(bestScore, curr_gen[0][0], percentToSwitch)
         
         if(curr_gen[0][0] < bestScore):
             bestScore = curr_gen[0][0]
             bestPermuation = curr_gen[0][1]
+        
         
     print(f'... Optimized bestEdges("{fname}", max_iter={max_iter}, pop_size={pop_size})')
     print()
@@ -204,12 +209,25 @@ def ifSwitchToMutate(oldScore, newScore, percentToSwitch):
     else:
         return False
     
-def test2():
-
-    optimizedBestSearch("cities1000.txt", 100, 100, 1)
+def compareCrossovers():
+    cities = tsp.load_city_locs("cities1000.txt")
+    permutationA = tsp.rand_perm(1000)   
+    permutationB = tsp.rand_perm(1000)
     
+    print("Original A: ", tsp.total_dist(permutationA, cities))
+    print("Original B: ", tsp.total_dist(permutationB, cities))
     
+    # Order Crossover
+    offSpringA, offSpringB = crossovers.orderCrossover(permutationA, permutationB)
+    print("OffspringB Order: ", tsp.total_dist(offSpringA, cities))
+    print("OffspringB Order: ", tsp.total_dist(offSpringB, cities))
     
+    # Partially Mapped Crossover
+    offSpringA, offSpringB = crossovers.partiallyMappedCrossover(permutationA, permutationB)
+    print("OffspringB Partially Mapped: ", tsp.total_dist(offSpringA, cities))
+    print("OffspringB Partially Mapped: ", tsp.total_dist(offSpringB, cities))
     
-
-test2()
+    # Best Edges Crossover
+    offSpringA, offSpringB = bestEdgesSearch(permutationA, permutationB, cities)
+    print("OffspringB Best Edges: ", tsp.total_dist(offSpringA, cities))
+    print("OffspringB Best Edges: ", tsp.total_dist(offSpringB, cities))

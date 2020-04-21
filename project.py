@@ -1,12 +1,9 @@
 
 import tsp
+import bestEdges
+import crossovers
 
-def helloWorld():
-    print("random permutations: ")
-    tsp.rand_best("cities1000.txt", 100)
-    print("mutate search: ")
-    tsp.mutate_search("cities1000.txt", 100, 500)
-    print("crossover search: ")
-    tsp.crossover_search("cities1000.txt", 100, 500)
+def main():
+    bestEdges.optimizedBestSearch("cities1000.txt", 500, 100, 1)
 
-helloWorld()
+main()

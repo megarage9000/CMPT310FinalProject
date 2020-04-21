@@ -1,8 +1,9 @@
 Optimal Tree for genetic algorithms:
-Link: https://arxiv.org/abs/1204.2352
+Link and License: https://arxiv.org/abs/1204.2352
 
 Crossovers operators for TSP:
 Link: https://www.hindawi.com/journals/cin/2017/7430125/
+License: 
 TY - JOUR
 TI - Genetic Algorithm for Traveling Salesman Problem with Modified Cycle Crossover Operator
 VL - 2017
