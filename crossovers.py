@@ -198,14 +198,14 @@ def getConflictsOrder(middlePartition, otherPartition):
 
 # ---- orderCrossover End ---- 
 
-def test():
-    partiallyMappedTest("cities1000.txt", 100, 50)
-    orderCrossoverTest("cities1000.txt", 100, 50)
-    tsp.crossover_search("cities1000.txt", 100, 50)
-    tsp.mutate_search("cities1000.txt", 100, 50)
-    tsp.rand_best("cities1000.txt", 100)
+# def test():
+#     partiallyMappedTest("cities1000.txt", 100, 50)
+#     orderCrossoverTest("cities1000.txt", 100, 50)
+#     tsp.crossover_search("cities1000.txt", 100, 50)
+#     tsp.mutate_search("cities1000.txt", 100, 50)
+#     tsp.rand_best("cities1000.txt", 100)
     
         
-test()
+# test()
     
     
